@@ -5,3 +5,7 @@
     Description: Styles for the MyBassGallery CMS.
 
 ****************/
+
+.error {
+    color: red;
+}
