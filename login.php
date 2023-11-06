@@ -44,8 +44,8 @@
         // If there is a user...
         if ($user)
         {
-           // Check if the password matches.
-            if ($password == $user['password'])
+           // Check if the hashed/salted password matches.
+            if (password_verify($password, $user['password']))
             {
                 $_SESSION['user'] = $user;
             }
@@ -61,8 +61,8 @@
     }
 
     // Functionality for log out button.
-    if (array_key_exists('logout', $_POST)) {
-        
+    if (array_key_exists('logout', $_POST)) 
+    {
         $_SESSION = [];
         header("Location: index.php");
     }

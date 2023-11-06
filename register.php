@@ -90,7 +90,7 @@
             $email = $_POST['email'];
 
             // To be salted and hashed using PHP's password hash function.
-            $password = $_POST['password'];
+            $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 
             // The user type for a registered user is 3 -> this is what is assigned by default.
             $userType = 3;
@@ -113,7 +113,6 @@
         }
     }
 
-    
 ?>
 
 <!DOCTYPE html>
@@ -167,6 +166,7 @@
     <?php endif ?>
     <?php if($userCreatedFlag) : ?>
     <h1> User successfully created! </h1>
+    <p><a href="login.php"> Please proceed to to the login page.</a></p>
     <?php endif ?>
 </body>
 </html>
