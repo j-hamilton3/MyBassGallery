@@ -103,6 +103,9 @@
             <p>Category: <?= getCategoryByID($post['categoryID'], $db)['categoryName'] ?></p>
             <p>Post by user: <?= getUserByID($post['userID'], $db)['userName'] ?></p>
             <p>Created on: <?= $post['date'] ?></p>
+            <?php if($editPermission || $userCreatedThisPost) : ?>
+                <a href="edit.php?id=<?= $post['postID'] ?>">Edit this post</a>
+            <?php endif ?>
             <?php if($editPermission) : ?>
                 <h2>You can edit this post!</h2>
             <?php endif ?>

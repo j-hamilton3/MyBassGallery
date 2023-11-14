@@ -1,35 +1,86 @@
 <?php
 
 /*******w******** 
-
+    
     Name: James Hamilton
-    Date: November 13, 2023
-    Description: The create page for MyBassGallery - it allows users to create a post.
+    Date: November 14, 2023
+    Description: The edit post page for MyBassGallery - it allows verified users to edit existing posts.
 
 ****************/
 
     // There must be a DB connection to continue.
     require('connect.php'); 
 
-    // PHP image resize library.
-    require 'C:\xampp\htdocs\a\php-image-resize-master\lib\ImageResize.php';
-    require 'C:\xampp\htdocs\a\php-image-resize-master\lib\ImageResizeException.php';
+    // Include the utility functions file.
+    require('utility.php');
 
     // Start/Resume the session.
     session_start();
 
-    // Check if user is logged in / in a session.
-    $userLoggedIn = false;
+    // PHP image resize library.
+    require 'C:\xampp\htdocs\a\php-image-resize-master\lib\ImageResize.php';
+    require 'C:\xampp\htdocs\a\php-image-resize-master\lib\ImageResizeException.php';
 
-    if (!empty($_SESSION))
+    // Check if GET is set and query the DB.
+    if (isset($_GET['id'])) {
+        
+        // Sanitize the id from the input GET.
+        $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+        // Build the SQL query using the filtered id.
+        $query = "SELECT * FROM post WHERE postID = :id";
+        $statement = $db->prepare($query);
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+
+        // Execute the SELECT and get the single row.
+        $statement->execute();
+        $post = $statement->fetch();
+
+    // If the $id is false.
+    } 
+    else 
     {
-        $userLoggedIn = true;        
+        $id = false;
+    }
+
+    $pageTitle = "Edit Post - MyBassGallery";
+
+    // Set the title to the title of the post.
+    if ($id)
+    {
+        $pageTitle = "Editing " . $post['title'] . " - MyBassGallery";
+    }
+
+    // Checks the user's type in the current session.
+    $userType = checkUserType();
+
+    $editPermission = false;
+
+    // If a user is a moderator (2) or admin (1), they have permission to edit this post.
+    if ($userType == 1 || $userType == 2)
+    {
+        $editPermission = true;
+    }
+
+    $userCreatedThisPost = false;
+
+    // If the user who created this post is in the session, they have permission to edit this post.
+    if ($id && !empty($_SESSION['user']))
+    {
+        $userInSession = $_SESSION['user']['userID'];
+
+        $userWhoCreatedPost = $post['userID'];
+
+        if ($userInSession == $userWhoCreatedPost)
+        {
+            $userCreatedThisPost = true;
+        }
     }
 
     // Get list of categories from the categories table.
     $categories = "SELECT * FROM categories;";
     $categoriesStatement = $db->prepare($categories);
-    
+
     $categoriesStatement->execute();
 
     // Create flags for error messages.
@@ -104,10 +155,13 @@
         {
             $imageFlag = true;
         }
-        
-        // If no errors were raised, we are ready to add the post to the DB.
+
+         // If no errors were raised, we are ready to add the post to the DB.
         if (!$titleFlag && !$serialNumberFlag && !$contentFlag && !$imageFlag)
         {
+            // Sanitize the id from the input GET.
+            $postID = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+    
             // Sanitize the title.
             $title = filter_input(INPUT_POST, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
@@ -125,8 +179,26 @@
 
             // Set the date to the current time.
             $date = date('Y-m-d H:i:s');
-            // Initalize selected image to null.
-            $image = null;
+            
+            // Initalize image to previous value.
+            $image = $post['image'];
+
+            // If delete image was checked....
+            if (isset($_POST['deleteCheckbox']))
+            {
+                // Set the image to Null.
+                $image = null;
+                
+                 // Remove the old picture from the filesystem.
+                if (!empty($post['image'])) {
+                    $imagePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . $post['image'];
+
+                    // Check if the file exists before attempting to delete it.
+                    if (file_exists($imagePath)) {
+                        unlink($imagePath);
+                    }
+                }
+            }
 
             // If there was an image uploaded, add it to the uploads folder, then save the file path to the $image variable.
             if ($upload_detected)
@@ -152,10 +224,14 @@
             }
 
             // Create the query for the INSERT.
-            $query = "INSERT INTO Post (userID, serialNumber, date, title, content, categoryID, image) VALUES (:userID, :serialNumber, :date, :title, :content, :categoryID, :image )";
+            $query = "UPDATE Post SET userID = :userID, serialNumber = :serialNumber, date = :date, title = :title, 
+                                               content = :content, categoryID = :categoryID, image = :image
+                                               WHERE postID = :postID";
+
             $statement = $db->prepare($query);
 
             // Bind the values.
+            $statement->bindValue(':postID', $postID);
             $statement->bindValue(":userID", $userID);
             $statement->bindValue(":serialNumber", $serialNumber);
             $statement->bindValue(":date", $date);
@@ -178,28 +254,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create A Post - MyBassGallery</title>
+    <title><?= $pageTitle ?></title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.tiny.cloud/1/4hz58kktrqrm6b4oka9ltipbvhgso4p1jqwk35j9czjmbtvb/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         tinymce.init({
-        selector: '#mytextarea'
+        selector: '#myedittextarea'
       });
     </script>
 </head>
 <body>
-    <?php if($userLoggedIn) : ?>
-        <h1> Create a post: </h1>
-        <form action="create.php" method="post" enctype="multipart/form-data">
+    <?php if ($id && ($editPermission || $userCreatedThisPost)) : ?>
+        <h1> Edit Post : <?= $post['title'] ?> </h1>
+        <form method="post" enctype="multipart/form-data">
             <label for="title">Title:</label>
-            <input name="title" id="create-title">
+            <input name="title" id="edit-title" value="<?= $post['title'] ?>">
             <?php if($titleFlag) : ?>
                 <p class="error">The title must be between 1 - 30 characters.</p>
             <?php endif ?>
             <br>
             <br>
             <label for="serialNumber">Serial Number: </label>
-            <input name="serialNumber" id="create-serialNumber">
+            <input name="serialNumber" id="edit-serialNumber" value="<?= $post['serialNumber'] ?>">
             <?php if($serialNumberFlag) : ?>
                 <p class="error">The serial number must be between 1 - 30 characters.</p>
             <?php endif ?>
@@ -208,32 +284,40 @@
             <label for="content"> Post Content: </label>
             <br>
             <br>
-            <textarea name="content" id="mytextarea"></textarea>
+            <textarea name="content" id="myedittextarea"><?= $post['content'] ?></textarea>
             <?php if($contentFlag) : ?>
                 <p class="error">The post content must be between 1 - 600 characters.</p>
             <?php endif ?>
             <br>
             <br>
             <label for="category"> Category </label>
-            <select name="category" id="create-category">
+            <select name="category" id="edit-category">
             <?php while($category = $categoriesStatement->fetch()) : ?>
-                <option value="<?= $category['categoryID'] ?>"> <?= $category['categoryName'] ?> </option>
+                <option value="<?= $category['categoryID'] ?>" <?php echo ($category['categoryID'] == $post['categoryID']) ? 'selected' : ''; ?>>
+                    <?= $category['categoryName'] ?>
+                </option>
             <?php endwhile ?>
             </select>
             <br>
             <br>
-            <label for="image">Image: </label>
+            <?php if(!empty($post["image"])) : ?>
+                <label for="deleteCheckbox">Delete previous image:</label>
+                <input type="checkbox" id="deleteCheckbox" name="deleteCheckbox">
+                <br>
+                <br>
+            <?php endif ?>
+            <label for="image">New Image: </label>
             <input type='file' name='image' id='image'>
             <?php if($imageFlag) : ?>
                 <p class="error">The image is not valid.</p>
             <?php endif ?>
             <br>
             <br>
-            <input type="submit" name="submit" value="Create Post">
+            <input type="submit" name="submit" value="Edit Post">
+            <input type="submit" name="action" value="Delete" onclick="return confirm('Are you sure you wish to delete this post?')" > 
         </form>
-    <?php else : ?>
-        <h1 class="error"> You are not logged in, <a href="login.php"> Log in </a> to create a post.</h1>
+    <?php else: ?>
+        <p class="error-message">An error has occurred, please return to the<a href="index.php"> home page</a>.</p>
     <?php endif ?>
-    
 </body>
 </html>
