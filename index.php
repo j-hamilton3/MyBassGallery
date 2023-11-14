@@ -11,6 +11,9 @@
     // There must be a DB connection to continue.
     require('connect.php'); 
 
+    // Include the functions from the utility.php file.
+    require('utility.php');
+
     // Start/Resume the session.
     session_start();
 
@@ -23,17 +26,6 @@
     // Execute the statement.
     $statement->execute();
 
-    // Function to get a user's name by their corresponding ID.
-    function getUserByID($userID, $db)
-    {
-        $userQuery = "SELECT * FROM users WHERE userID = " . $userID . ";";
-
-        $userStatement = $db->prepare($userQuery);
-   
-        $userStatement->execute();
-
-        return $userStatement->fetch();
-    }
 ?>
 
 <!DOCTYPE html>
@@ -58,10 +50,13 @@
     </nav>
     <?php while($post = $statement->fetch()) : ?>
         <div class="post">
-            <h2><?= $post['title'] ?></h2>
+            <h2><a href="post.php?id=<?= $post['postID'] ?>"><?= $post['title'] ?></a></h2>
             <p>Serial Number: <?= $post['serialNumber'] ?></p>
-            <img src="<?= $post['image'] ?>" class="post-image">
+            <?php if(!empty($post['image'])) : ?>
+                <img src="<?= $post['image'] ?>" class="post-image">
+            <?php endif ?>
             <p><?= html_entity_decode($post['content']) ?></p>
+            <p>Category: <?= getCategoryByID($post['categoryID'], $db)['categoryName'] ?></p>
             <p>Post by user: <?= getUserByID($post['userID'], $db)['userName'] ?></p>
             <p>Created on: <?= $post['date'] ?></p>
         </div>
