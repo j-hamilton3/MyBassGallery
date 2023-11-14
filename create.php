@@ -148,7 +148,7 @@
                 $medium_image->resizeToWidth(400);
                 $medium_image->save(file_upload_path($base_filename . '_medium.' . $file_extension));
 
-                $image = (file_upload_path($base_filename . '_medium.' . $file_extension));
+                $image = "uploads\\" . $base_filename . '_medium.' . $file_extension;
             }
 
             // Create the query for the INSERT.
@@ -166,6 +166,9 @@
 
             // Execute the INSERT.
             $statement->execute();
+
+            // Send the user back to the index.
+            header("Location: index.php");
         }
     }
 ?>

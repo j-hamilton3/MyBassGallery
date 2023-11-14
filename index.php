@@ -14,6 +14,26 @@
     // Start/Resume the session.
     session_start();
 
+    // Get all the posts from the Post table.
+    $query = "SELECT * FROM post ORDER BY date DESC;";
+
+       // Make a prepare statement with the query.
+    $statement = $db->prepare($query);
+   
+    // Execute the statement.
+    $statement->execute();
+
+    // Function to get a user's name by their corresponding ID.
+    function getUserByID($userID, $db)
+    {
+        $userQuery = "SELECT * FROM users WHERE userID = " . $userID . ";";
+
+        $userStatement = $db->prepare($userQuery);
+   
+        $userStatement->execute();
+
+        return $userStatement->fetch();
+    }
 ?>
 
 <!DOCTYPE html>
@@ -36,6 +56,17 @@
         <a href="login.php">Logout</a>
         <?php endif ?>   
     </nav>
+    <?php while($post = $statement->fetch()) : ?>
+        <div class="post">
+            <h2><?= $post['title'] ?></h2>
+            <p>Serial Number: <?= $post['serialNumber'] ?></p>
+            <img src="<?= $post['image'] ?>" class="post-image">
+            <p><?= html_entity_decode($post['content']) ?></p>
+            <p>Post by user: <?= getUserByID($post['userID'], $db)['userName'] ?></p>
+            <p>Created on: <?= $post['date'] ?></p>
+        </div>
+    <?php endwhile ?>
+    
     
 </body>
 </html>
