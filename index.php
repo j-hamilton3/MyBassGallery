@@ -42,9 +42,11 @@
         <?php if(empty($_SESSION)) : ?>
         <a href="login.php">Login</a>
         <a href="register.php">Register</a>
+        <a href="categories.php">Categories</a>
         <?php else : ?>
         <a href="create.php">Create a post</a>
         <a href="profile.php?userID=<?= $_SESSION['user']['userID'] ?>"><?= $_SESSION['user']['userName'] ?></a>
+        <a href="categories.php">Categories</a>
         <a href="login.php">Logout</a>
         <?php endif ?>   
     </nav>
