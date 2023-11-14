@@ -89,6 +89,36 @@
     $contentFlag = false;
     $imageFlag = false;
 
+    // If the Delete button was clicked.
+    if (isset($_POST['action']) && $_POST['action'] === 'Delete') {
+        
+        // Remove the old picture from the filesystem.
+        if (!empty($post['image'])) {
+            $imagePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . $post['image'];
+
+            // Check if the file exists before attempting to delete it.
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+        
+        // Sanitize the id from the input GET.
+        $deletePostID = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+
+        // Build the SQL query.
+        $query = "DELETE FROM post WHERE postID = :id";
+
+        // Prepare the query and bind the value.
+        $statement = $db->prepare($query);
+        $statement->bindValue(':id', $deletePostID, PDO::PARAM_INT);
+
+        // Execute the statement
+        $statement->execute();
+
+        // Send the user back to the index.
+        header("Location: index.php");
+    }
+
     // When the form is posted.
     if ($_POST)
     {
