@@ -23,7 +23,7 @@
     }
     else if (!empty($_POST))
     {
-        // Sanitization / Hashing considered in the future?
+        // Sanitization considered in the future?
 
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -96,7 +96,7 @@
         <h4 class="error"><?= $errorMessage ?></h4>
         <?php endif ?>
     <?php else : ?>
-    <h2> You have successfully logged in to your user account! </h2>
+    <h2> You are logged in to your user account. </h2>
     <p> You are logged in as user <?= $_SESSION['user']['userName'] ?> </p>
     <a href="index.php">Return to home.</a>
     <form method="post">
