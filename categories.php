@@ -3,7 +3,7 @@
 /*******w******** 
     
     Name: James Hamilton
-    Date: November 4, 2023
+    Date: November 14, 2023
     Description: A webpage for MyBassGallery that allows users to view all page categories.
 
 ****************/
