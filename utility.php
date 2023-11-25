@@ -45,4 +45,25 @@
 
         return $type;
     }
+
+    // Function to get plain english User privilege level by userType number.
+    function checkUserTypeNumber($userType)
+    {
+        $userString = "";
+
+        switch($userType)
+        {
+            case 1:
+                $userString = "Admin";
+                break;
+            case 2:
+                $userString = "Moderator";
+                break;
+            case 3:
+                $userString = "Registered";
+                break;
+        }
+
+        return $userString;
+    }
 ?>

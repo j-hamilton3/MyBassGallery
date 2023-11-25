@@ -20,6 +20,11 @@
     // Get the user's userType.
     $userType = checkUserType();
 
+    // Query to get data of all non admin users.
+    $users = "SELECT * FROM users WHERE userType != 1;";
+    $usersStatement = $db->prepare($users);
+
+    $usersStatement->execute();
 ?>
 
 <!DOCTYPE html>
@@ -32,9 +37,13 @@
 </head>
 <body>
     <?php if($userType == 1) : ?>
-        <h1> You are an admin and have permission to enter this page. </h1>
+        <h1> Select a user to edit:</h1>
+        <h2> List of users: </h2>
+        <?php while($user = $usersStatement->fetch()) : ?>
+            <li><a href="adminEditUsers.php?id=<?= $user['userID'] ?>">Username: <?= $user['userName'] ?> | User Type: <?= checkUserTypeNumber($user['userType']) ?></a></li>
+        <?php endwhile ?>
     <?php else : ?>
-        <h1> You are not an admin and do not have permission.<a href="index.php">Home</a> </h1>
+        <h1 class="error"> You do not have permission to use this page. Return to<a href="index.php"> Home.</a></h1>
     <?php endif ?>
 </body>
 </html>
