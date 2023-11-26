@@ -42,8 +42,101 @@
         $id = false;
     }
 
+    // Create the errorFlags for validation.
+    $usernameFlag = false;
+    $emailFlag = false;
+    $usernameTakenFlag = false;
+
+    // If the Delete button was clicked.
+    if (isset($_POST['action']) && $_POST['action'] === 'Delete') {
+
+        // Build the SQL query.
+        $query = "DELETE FROM Users WHERE userID = :id";
+
+        // Prepare the query and bind the value.
+        $statement = $db->prepare($query);
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+
+        // Execute the statement
+        $statement->execute();
+
+        // Send the user back to the index.
+        header("Location: adminManageUsers.php");
+    }
+
     // When the form is posted...
-    
+    if ($_POST)
+    {
+        // Check if the email is valid.
+        $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+
+        if (!$email)
+        {
+            $emailFlag = true;
+        }
+
+        // Check if the username is valid.
+        
+        // If it is zero characters or more than 20 characters.
+        if (!$_POST['userName'] || strlen($_POST['userName']) > 20)
+        {
+            $usernameFlag = true;
+        }
+        else
+        {
+            $username = $_POST['userName'];
+            
+            // Create the SQL Query -> Checks if the matching user in the DB.
+            $query = "SELECT * FROM Users WHERE username = :username";
+            $statement = $db->prepare($query);
+
+            // Bind the username value.
+            $statement->bindValue(":username", $username);
+
+            // Execute the statement.
+            $statement->execute();
+
+            // Check if there is a username.
+            $userSameName = $statement->fetch(); 
+
+            if ($userSameName && $user['userName'] != $userSameName['userName'] )
+            {
+                $usernameTakenFlag = true;
+            }
+        }
+
+        // If no errors were raised, we can persist changes to DB.
+        if (!$usernameFlag && !$emailFlag && !$usernameTakenFlag)
+        {
+            // Sanitize the username.
+            $username = filter_input(INPUT_POST, 'userName', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            // Email has already been validated as email.
+            $email = $_POST['email'];
+
+            $userType = $_POST['userType'];
+
+            $userID = $id;
+
+            // Create the query for the update.
+            $query = "UPDATE Users SET userName = :userName, email = :email, userType = :userType
+                      WHERE userID = :userID";
+            
+            $statement = $db->prepare($query);
+
+            // Bind the values.
+            $statement->bindValue(':userName', $username);
+            $statement->bindValue(":email", $email);
+            $statement->bindValue(":userType", $userType);
+            $statement->bindValue(":userID", $userID);
+
+            // Execute the UPDATE.
+            $statement->execute();
+
+            // Send the user back to the adminManageUsersPage.
+            header("Location: adminManageUsers.php");
+        }
+    }    
 ?>
 
 <!DOCTYPE html>
@@ -61,10 +154,19 @@
             <form method="post">
                 <label for="userName">Username:</label>
                 <input name="userName" id="edit-userName" value="<?= $user['userName'] ?>">
+                <?php if($usernameFlag) : ?>
+                    <p class="error">Please enter a username. (Up to 20 characters)</p>
+                <?php endif ?>
+                <?php if($usernameTakenFlag) : ?>
+                    <p class="error">The selected username is already in use.</p>
+                <?php endif ?>
                 <br>
                 <br>
                 <label for="email">Email<label>
                 <input type="email" name="email" id="edit-email" value="<?= $user['email'] ?>">
+                <?php if($emailFlag) : ?>
+                    <p class="error"> Please enter a valid email.</p>
+                <?php endif ?>
                 <br>
                 <br>
                 <label for="userType"> User Type </label>
