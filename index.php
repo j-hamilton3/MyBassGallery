@@ -40,14 +40,17 @@
     <nav>
         <h1>Home</h1>
         <?php if(empty($_SESSION)) : ?>
-        <a href="login.php">Login</a>
-        <a href="register.php">Register</a>
-        <a href="categories.php">Categories</a>
+            <a href="login.php">Login</a>
+            <a href="register.php">Register</a>
+            <a href="categories.php">Categories</a>
         <?php else : ?>
-        <a href="create.php">Create a post</a>
-        <a href="profile.php?userID=<?= $_SESSION['user']['userID'] ?>"><?= $_SESSION['user']['userName'] ?></a>
-        <a href="categories.php">Categories</a>
-        <a href="login.php">Logout</a>
+            <a href="create.php">Create a post</a>
+            <a href="profile.php?userID=<?= $_SESSION['user']['userID'] ?>"><?= $_SESSION['user']['userName'] ?></a>
+            <a href="categories.php">Categories</a>
+            <?php if(checkUserType() == 1) : ?>
+                <a href="adminManageUsers.php">Manage Users</a>
+            <?php endif ?>
+            <a href="login.php">Logout</a>
         <?php endif ?>   
     </nav>
     <?php while($post = $statement->fetch()) : ?>
@@ -62,8 +65,6 @@
             <p>Post by user: <?= getUserByID($post['userID'], $db)['userName'] ?></p>
             <p>Created on: <?= $post['date'] ?></p>
         </div>
-    <?php endwhile ?>
-    
-    
+    <?php endwhile ?>    
 </body>
 </html>
