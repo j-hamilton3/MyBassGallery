@@ -72,8 +72,24 @@
     // Error flag for comment content.
     $contentFlag = false;
 
+    // If the Delete button was clicked.
+    if (isset($_POST['action']) && $_POST['action'] === 'Delete') {
+
+        $commentID = $_POST['commentID'];
+
+        // Build the SQL query.
+        $deleteQuery = "DELETE FROM comment WHERE commentID = :commentID";
+
+        // Prepare the query and bind the value.
+        $deleteStatement = $db->prepare($deleteQuery);
+        $deleteStatement->bindValue(':commentID', $commentID);
+
+        // Execute the statement
+        $deleteStatement->execute();
+    }
+
     // If a comment is Posted.
-    if ($_POST)
+    if ($_POST && !isset($_POST['action']))
     {
         // Check if the content is 0 and more than 300 characters.
         if (!$_POST['content'] || strlen($_POST['content']) > 300)
@@ -173,7 +189,12 @@
                 <h3>User: <?= getUserByID($comment['userID'], $db)['userName'] ?></h3>
                 <p><?= $comment['content'] ?></p>
                 <p><?= $comment['date'] ?></p>
-                <p></p>
+                <?php if($userType == 1 || $userType == 2) :?>
+                    <form method="post">
+                        <input type="hidden"  name="commentID" value="<?= $comment['commentID'] ?>" >
+                        <input type="submit" name="action" value="Delete" onclick="return confirm('Are you sure you wish to delete this comment?')" > 
+                    </form>
+                <?php endif ?>
             </div>
         <?php endwhile ?>
         <?php if($userType != 0) : ?>
@@ -188,7 +209,7 @@
                 <?php endif ?>
                 <br>
                 <br>
-                <input type="submit" name="submit" value="Create Post">
+                <input type="submit" name="submit" value="Create Comment">
             </form>
         <?php endif ?>
     <?php else : ?>
