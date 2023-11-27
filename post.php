@@ -68,6 +68,50 @@
             $userCreatedThisPost = true;
         }
     }
+
+    // Error flag for comment content.
+    $contentFlag = false;
+
+    // If a comment is Posted.
+    if ($_POST)
+    {
+        // Check if the content is 0 and more than 300 characters.
+        if (!$_POST['content'] || strlen($_POST['content']) > 300)
+        {
+            // Set the content flag.
+            $contentFlag = true;
+        }
+
+        // If the contentFlag is not set off persist comment to DB.
+        if (!$contentFlag)
+        {
+            $userID = $_SESSION['user']['userID'];
+
+            // Previously sanitized.
+            $postID = $id;
+
+            // Sanitize content.
+            $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            
+            // Get the current date.
+            $date = date('Y-m-d H:i:s');
+
+            // Create the query for the INSERT.
+            $query = "INSERT INTO Comment (userID, postID, content, date) VALUES (:userID, :postID, :content, :date)";
+
+            $statement = $db->prepare($query);
+
+            // Bind the values.
+            $statement->bindValue(":userID", $userID);
+            $statement->bindValue(":postID", $postID);
+            $statement->bindValue(":content", $content);
+            $statement->bindValue(":date", $date);
+        
+
+            // Execute the INSERT.
+            $statement->execute();
+        }
+    }
 ?>
 
 <!DOCTYPE html>
@@ -113,6 +157,22 @@
                 <h2>You created this post!</h2>
             <?php endif ?>
         </div>
+
+        <?php if($userType != 0) : ?>
+            <h2>Submit a comment, <?= $_SESSION['user']['userName'] ?>:</h2>
+            <form method="post">
+                <label for="content">Comment: </label>
+                <br>
+                <br>
+                <input name="content" id="commentContent">
+                <?php if($contentFlag) : ?>
+                    <p class="error">Please enter a comment. (Maximum 300 characters)</p>
+                <?php endif ?>
+                <br>
+                <br>
+                <input type="submit" name="submit" value="Create Post">
+            </form>
+        <?php endif ?>
     <?php else : ?>
             <p class="error-message">An error has occurred, please return to the<a href="index.php"> home page</a>.</p>
     <?php endif ?>
