@@ -107,10 +107,21 @@
             $statement->bindValue(":content", $content);
             $statement->bindValue(":date", $date);
         
-
             // Execute the INSERT.
             $statement->execute();
         }
+    }
+
+    // If the id is valid, we can retrieve the comments for the page.
+    if ($id)
+    {
+        // Build the SQL query using the filtered id.
+        $commentQuery = "SELECT * FROM comment WHERE postID = :id ORDER BY date DESC";
+        $commentStatement = $db->prepare($commentQuery);
+        $commentStatement->bindValue(':id', $id);
+ 
+        // Execute the statement.
+        $commentStatement->execute();
     }
 ?>
 
@@ -157,7 +168,14 @@
                 <h2>You created this post!</h2>
             <?php endif ?>
         </div>
-
+        <?php while($comment = $commentStatement->fetch()) : ?>
+            <div class="comment">
+                <h3>User: <?= getUserByID($comment['userID'], $db)['userName'] ?></h3>
+                <p><?= $comment['content'] ?></p>
+                <p><?= $comment['date'] ?></p>
+                <p></p>
+            </div>
+        <?php endwhile ?>
         <?php if($userType != 0) : ?>
             <h2>Submit a comment, <?= $_SESSION['user']['userName'] ?>:</h2>
             <form method="post">

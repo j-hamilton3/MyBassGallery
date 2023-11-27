@@ -13,8 +13,14 @@
 
 .post {
     text-align: center;
-    margin-bottom: 80px;
+    margin-bottom: 40px;
     margin-top: 20px;
     border: 5px solid black;
     padding: 5px;
+}
+
+.comment {
+    border: 2px solid black;
+    padding: 5px;
+    margin-bottom: 15px;
 }
