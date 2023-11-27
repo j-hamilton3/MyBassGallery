@@ -49,6 +49,7 @@
             <a href="categories.php">Categories</a>
             <?php if(checkUserType() == 1) : ?>
                 <a href="adminManageUsers.php">Manage Users</a>
+                <a href="adminManageCategories.php">Manage Categories</a>
             <?php endif ?>
             <a href="login.php">Logout</a>
         <?php endif ?>   
