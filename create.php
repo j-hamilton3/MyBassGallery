@@ -12,8 +12,8 @@
     require('connect.php'); 
 
     // PHP image resize library.
-    require 'C:\xampp\htdocs\a\php-image-resize-master\lib\ImageResize.php';
-    require 'C:\xampp\htdocs\a\php-image-resize-master\lib\ImageResizeException.php';
+    require 'php-image-resize-master\lib\ImageResize.php';
+    require 'php-image-resize-master\lib\ImageResizeException.php';
 
     // Start/Resume the session.
     session_start();

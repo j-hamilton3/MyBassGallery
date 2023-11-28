@@ -18,8 +18,8 @@
     session_start();
 
     // PHP image resize library.
-    require 'C:\xampp\htdocs\a\php-image-resize-master\lib\ImageResize.php';
-    require 'C:\xampp\htdocs\a\php-image-resize-master\lib\ImageResizeException.php';
+    require 'php-image-resize-master\lib\ImageResize.php';
+    require 'php-image-resize-master\lib\ImageResizeException.php';
 
     // Check if GET is set and query the DB.
     if (isset($_GET['id'])) {
