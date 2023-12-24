@@ -150,17 +150,30 @@
     <title><?= $pageTitle ?></title>
 </head>
 <body>
-    <nav>
-        <h1>Post</h1>
+    <nav class='navbar'>
+        <a href="index.php">
+            <div class="logo">
+                <img src="uploads/mbg-logo.png" width="70px">
+                <h1>MyBassGallery</h1>
+            </div>
+        </a>
         <?php if(empty($_SESSION)) : ?>
-        <a href="index.php">Home</a>
-        <a href="login.php">Login</a>
-        <a href="register.php">Register</a>
+            <div class="links">
+                <a href="categories.php">Categories</a>
+                <a href="register.php">Register</a> 
+                <a href="login.php">Login</a>   
+            </div>  
         <?php else : ?>
-        <a href="index.php">Home</a>
-        <a href="create.php">Create a post</a>
-        <a href="profile.php?userID=<?= $_SESSION['user']['userID'] ?>"><?= $_SESSION['user']['userName'] ?></a>
-        <a href="login.php">Logout</a>
+            <div class="links">
+                <a href="create.php">Create a Post</a>
+                <a href="categories.php">Categories</a>
+                <?php if(checkUserType() == 1) : ?>
+                    <a href="adminManageUsers.php">Manage Users</a>
+                    <a href="adminManageCategories.php">Manage Categories</a>
+                <?php endif ?>
+                <a href="profile.php?userID=<?= $_SESSION['user']['userID'] ?>"><?= $_SESSION['user']['userName'] ?></a>
+                <a href="login.php">Logout</a>
+            </div>
         <?php endif ?>   
     </nav>
     <?php if($id) : ?>

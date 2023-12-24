@@ -36,6 +36,31 @@
     <title>Manage Users - MyBassGallery</title>
 </head>
 <body>
+    <nav class='navbar'>
+        <a href="index.php">
+            <div class="logo">
+                <img src="uploads/mbg-logo.png" width="70px">
+                <h1>MyBassGallery</h1>
+            </div>
+        </a>
+        <?php if(empty($_SESSION)) : ?>
+            <div class="links">
+                <a href="categories.php">Categories</a>
+                <a href="register.php">Register</a> 
+                <a href="login.php">Login</a>
+            </div>  
+        <?php else : ?>
+            <div class="links">
+                <a href="create.php">Create a Post</a>
+                <a href="categories.php">Categories</a>
+                <?php if(checkUserType() == 1) : ?>
+                    <a href="adminManageCategories.php">Manage Categories</a>
+                <?php endif ?>
+                <a href="profile.php?userID=<?= $_SESSION['user']['userID'] ?>"><?= $_SESSION['user']['userName'] ?></a>
+                <a href="login.php">Logout</a>
+            </div>
+        <?php endif ?>   
+    </nav>
     <?php if($userType == 1) : ?>
         <h1> Select a user to edit:</h1>
         <h2> List of users: </h2>
@@ -43,7 +68,7 @@
             <li><a href="adminEditUsers.php?id=<?= $user['userID'] ?>">Username: <?= $user['userName'] ?> | User Type: <?= checkUserTypeNumber($user['userType']) ?></a></li>
         <?php endwhile ?>
     <?php else : ?>
-        <h1 class="error"> You do not have permission to use this page. Return to<a href="index.php"> Home.</a></h1>
+        <p class="error"> You do not have permission to use this page. Return to <a href="index.php"> Home.</a></p>
     <?php endif ?>
 </body>
 </html>

@@ -294,6 +294,32 @@
     </script>
 </head>
 <body>
+    <nav class='navbar'>
+        <a href="index.php">
+            <div class="logo">
+                <img src="uploads/mbg-logo.png" width="70px">
+                <h1>MyBassGallery</h1>
+            </div>
+        </a>
+        <?php if(empty($_SESSION)) : ?>
+            <div class="links">
+                <a href="categories.php">Categories</a>
+                <a href="register.php">Register</a> 
+                <a href="login.php">Login</a>
+            </div>  
+        <?php else : ?>
+            <div class="links">
+                <a href="create.php">Create a Post</a>
+                <a href="categories.php">Categories</a>
+                <?php if(checkUserType() == 1) : ?>
+                    <a href="adminManageUsers.php">Manage Users</a>
+                    <a href="adminManageCategories.php">Manage Categories</a>
+                <?php endif ?>
+                <a href="profile.php?userID=<?= $_SESSION['user']['userID'] ?>"><?= $_SESSION['user']['userName'] ?></a>
+                <a href="login.php">Logout</a>
+            </div>
+        <?php endif ?>   
+    </nav>
     <?php if ($id && ($editPermission || $userCreatedThisPost)) : ?>
         <h1> Edit Post : <?= $post['title'] ?> </h1>
         <form method="post" enctype="multipart/form-data">
@@ -347,7 +373,7 @@
             <input type="submit" name="action" value="Delete" onclick="return confirm('Are you sure you wish to delete this post?')" > 
         </form>
     <?php else: ?>
-        <p class="error-message">An error has occurred, please return to the<a href="index.php"> home page</a>.</p>
+        <p class="error">An error has occurred, please return to the <a href="index.php"> home page</a>.</p>
     <?php endif ?>
 </body>
 </html>

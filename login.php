@@ -10,6 +10,9 @@
     // There must be a DB connection to continue.
     require('connect.php');
 
+    // Include the utility.php functions.
+    require('utility.php');
+
     // Start/Resume the session.
     session_start();
 
@@ -77,6 +80,30 @@
     <title>Login - MyBassGallery</title>
 </head>
 <body>
+    <nav class='navbar'>
+        <a href="index.php">
+            <div class="logo">
+                <img src="uploads/mbg-logo.png" width="70px">
+                <h1>MyBassGallery</h1>
+            </div>
+        </a>
+        <?php if(empty($_SESSION)) : ?>
+            <div class="links">
+                <a href="categories.php">Categories</a>
+                <a href="register.php">Register</a> 
+            </div>  
+        <?php else : ?>
+            <div class="links">
+                <a href="create.php">Create a Post</a>
+                <a href="categories.php">Categories</a>
+                <?php if(checkUserType() == 1) : ?>
+                    <a href="adminManageUsers.php">Manage Users</a>
+                    <a href="adminManageCategories.php">Manage Categories</a>
+                <?php endif ?>
+                <a href="profile.php?userID=<?= $_SESSION['user']['userID'] ?>"><?= $_SESSION['user']['userName'] ?></a>
+            </div>
+        <?php endif ?>   
+    </nav>
     <?php if(empty($_SESSION['user'])) : ?>
     <h1>MyBassGallery Login:</h1>
     <form action="login.php" method="post">
@@ -97,7 +124,7 @@
         <?php endif ?>
     <?php else : ?>
     <h2> You are logged in to your user account. </h2>
-    <p> You are logged in as user <?= $_SESSION['user']['userName'] ?> </p>
+    <p> You are logged in as user <?= $_SESSION['user']['userName'] ?>. </p>
     <a href="index.php">Return to home.</a>
     <form method="post">
         <input type="submit" name="logout" class="btn_logout" value="log out" />

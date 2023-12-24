@@ -11,6 +11,9 @@
     // There must be a DB connection to continue.
     require('connect.php'); 
 
+    // Add Utility.php functions.
+    require('utility.php');
+
     // PHP image resize library.
     require 'php-image-resize-master\lib\ImageResize.php';
     require 'php-image-resize-master\lib\ImageResizeException.php';
@@ -188,6 +191,31 @@
     </script>
 </head>
 <body>
+    <nav class='navbar'>
+        <a href="index.php">
+            <div class="logo">
+                <img src="uploads/mbg-logo.png" width="70px">
+                <h1>MyBassGallery</h1>
+            </div>
+        </a>
+        <?php if(empty($_SESSION)) : ?>
+            <div class="links">
+                <a href="categories.php">Categories</a>
+                <a href="register.php">Register</a> 
+                <a href="login.php">Login</a>
+            </div>  
+        <?php else : ?>
+            <div class="links">
+                <a href="categories.php">Categories</a>
+                <?php if(checkUserType() == 1) : ?>
+                    <a href="adminManageUsers.php">Manage Users</a>
+                    <a href="adminManageCategories.php">Manage Categories</a>
+                <?php endif ?>
+                <a href="profile.php?userID=<?= $_SESSION['user']['userID'] ?>"><?= $_SESSION['user']['userName'] ?></a>
+                <a href="login.php">Logout</a>
+            </div>
+        <?php endif ?>   
+    </nav>
     <?php if($userLoggedIn) : ?>
         <h1> Create a post: </h1>
         <form action="create.php" method="post" enctype="multipart/form-data">
@@ -232,8 +260,7 @@
             <input type="submit" name="submit" value="Create Post">
         </form>
     <?php else : ?>
-        <h1 class="error"> You are not logged in, <a href="login.php"> Log in </a> to create a post.</h1>
-    <?php endif ?>
-    
+        <p class="error"> You are not logged in, <a href="login.php"> Log in </a> to create a post.</p>
+    <?php endif ?>    
 </body>
 </html>

@@ -56,6 +56,32 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <nav class='navbar'>
+        <a href="index.php">
+            <div class="logo">
+                <img src="uploads/mbg-logo.png" width="70px">
+                <h1>MyBassGallery</h1>
+            </div>
+        </a>
+        <?php if(empty($_SESSION)) : ?>
+            <div class="links">
+                <a href="categories.php">Categories</a>
+                <a href="register.php">Register</a> 
+                <a href="login.php">Login</a>   
+            </div>  
+        <?php else : ?>
+            <div class="links">
+                <a href="create.php">Create a Post</a>
+                <a href="categories.php">Categories</a>
+                <?php if(checkUserType() == 1) : ?>
+                    <a href="adminManageUsers.php">Manage Users</a>
+                    <a href="adminManageCategories.php">Manage Categories</a>
+                <?php endif ?>
+                <a href="profile.php?userID=<?= $_SESSION['user']['userID'] ?>"><?= $_SESSION['user']['userName'] ?></a>
+                <a href="login.php">Logout</a>
+            </div>
+        <?php endif ?>   
+    </nav>
     <?php if($id) : ?>
         <h1>Category: <?= getCategoryByID($id, $db)['categoryName']  ?> Basses</h1>
         <?php while($post = $statement->fetch()) : ?>
@@ -72,7 +98,7 @@
         </div>
     <?php endwhile ?>
     <?php else : ?>
-        <p class="error-message">An error has occurred, please return to the<a href="index.php"> home page</a>.</p>
+        <p class="error">An error has occurred, please return to the <a href="index.php"> home page</a>.</p>
     <?php endif ?>
 </body>
 </html>

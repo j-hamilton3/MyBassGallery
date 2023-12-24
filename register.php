@@ -11,6 +11,9 @@
     // There must be a DB connection to continue.
     require('connect.php'); 
 
+    // Include the utility functions.
+    require('utility.php');
+
     // Start/Resume the session.
     session_start();
 
@@ -124,7 +127,32 @@
     <title>Register - MyBassGallery</title>
 </head>
 <body>
-    <?php if(!$userCreatedFlag) : ?>
+    <nav class='navbar'>
+        <a href="index.php">
+            <div class="logo">
+                <img src="uploads/mbg-logo.png" width="70px">
+                <h1>MyBassGallery</h1>
+            </div>
+        </a>
+        <?php if(empty($_SESSION)) : ?>
+            <div class="links">
+                <a href="categories.php">Categories</a>
+                <a href="login.php">Login</a>
+            </div>  
+        <?php else : ?>
+            <div class="links">
+                <a href="create.php">Create a Post</a>
+                <a href="categories.php">Categories</a>
+                <?php if(checkUserType() == 1) : ?>
+                    <a href="adminManageUsers.php">Manage Users</a>
+                    <a href="adminManageCategories.php">Manage Categories</a>
+                <?php endif ?>
+                <a href="profile.php?userID=<?= $_SESSION['user']['userID'] ?>"><?= $_SESSION['user']['userName'] ?></a>
+                <a href="login.php">Logout</a>
+            </div>
+        <?php endif ?>   
+    </nav>
+    <?php if(!$userCreatedFlag && empty($_SESSION)) : ?>
     <h1>Register for a MyBassGallery account:</h1>
     <form action="register.php" method="post">
     <legend>Please enter the following information:</legend> 
@@ -167,6 +195,9 @@
     <?php if($userCreatedFlag) : ?>
     <h1> User successfully created! </h1>
     <p><a href="login.php"> Please proceed to to the login page.</a></p>
+    <?php endif ?>
+    <?php if(!empty($_SESSION)) : ?>
+        <p class="error"> You are already logged in. Return to the <a href="index.php">home page.  </a></p>
     <?php endif ?>
 </body>
 </html>
