@@ -56,7 +56,7 @@
                 <?php if(checkUserType() == 1) : ?>
                     <a href="adminManageCategories.php">Manage Categories</a>
                 <?php endif ?>
-                <a href="profile.php?userID=<?= $_SESSION['user']['userID'] ?>"><?= $_SESSION['user']['userName'] ?></a>
+                <a class="username"><?= $_SESSION['user']['userName'] ?></a>
                 <a href="login.php">Logout</a>
             </div>
         <?php endif ?>   
