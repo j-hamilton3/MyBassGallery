@@ -70,8 +70,9 @@
             <?php if(!empty($post['image'])) : ?>
                 <img src="<?= $post['image'] ?>" class="post-image">
             <?php endif ?>
-            <p><?= html_entity_decode($post['content']) ?></p>
-            <p>Category: <?= getCategoryByID($post['categoryID'], $db)['categoryName'] ?></p>
+            <hr>
+            <p class="post-content"><?= html_entity_decode($post['content']) ?></p>
+            <p class="post-category">Category: <?= getCategoryByID($post['categoryID'], $db)['categoryName'] ?></p>
             <p>Post by user: <?= getUserByID($post['userID'], $db)['userName'] ?></p>
             <p>Created on: <?= $post['date'] ?></p>
         </div>
