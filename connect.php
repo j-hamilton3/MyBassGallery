@@ -1,7 +1,7 @@
 <?php
 
-/*******w******** 
-    
+/*******w********
+
     Name: James Hamilton
     Date: November 4, 2023
     Description: Created to ensure the user is connected to the Database.
@@ -9,11 +9,11 @@
 ****************/
 
      define('DB_DSN','mysql:host=localhost;dbname=serverside;charset=utf8');
-     define('DB_USER','serveruser');
-     define('DB_PASS','gorgonzola7!');     
-     
+     define('DB_USER','root'); // Previously 'serveruser'
+     define('DB_PASS',''); // Previously 'gorgonzola7!'
+
     //  PDO is PHP Data Objects
-    //  mysqli <-- BAD. 
+    //  mysqli <-- BAD.
     //  PDO <-- GOOD.
      try {
          // Try creating new PDO connection to MySQL.
