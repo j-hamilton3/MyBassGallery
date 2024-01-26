@@ -187,16 +187,16 @@
             <p class="post-content"><?= html_entity_decode($post['content']) ?></p>
             <p class="post-category"><b>Category: </b><?= getCategoryByID($post['categoryID'], $db)['categoryName'] ?></p>
             <p><b>By User:</b> <?= getUserByID($post['userID'], $db)['userName'] ?></p>
-            <p><b>Created On:</b> <?= $post['date'] ?></p>
+            <p><b>Created On:</b> <?= date("F j, Y g:i A", strtotime($post['date'])) ?></p>
             <?php if($editPermission || $userCreatedThisPost) : ?>
                 <a href="edit.php?id=<?= $post['postID'] ?>">Edit this post</a>
             <?php endif ?>
         </div>
         <?php while($comment = $commentStatement->fetch()) : ?>
             <div class="comment">
-                <h3>User: <?= getUserByID($comment['userID'], $db)['userName'] ?></h3>
+                <h3><?= getUserByID($comment['userID'], $db)['userName'] ?></h3>
                 <p><?= $comment['content'] ?></p>
-                <p><?= $comment['date'] ?></p>
+                <p><?= date("F j, Y g:i A", strtotime($comment['date'])) ?></p>
                 <?php if($userType == 1 || $userType == 2) :?>
                     <form method="post">
                         <input type="hidden"  name="commentID" value="<?= $comment['commentID'] ?>" >

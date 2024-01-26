@@ -74,7 +74,7 @@
             <p class="post-content"><?= html_entity_decode($post['content']) ?></p>
             <p class="post-category"><b>Category:</b> <?= getCategoryByID($post['categoryID'], $db)['categoryName'] ?></p>
             <p><b>By User:</b> <?= getUserByID($post['userID'], $db)['userName'] ?></p>
-            <p><b>Created On:</b> <?= $post['date'] ?></p>
+            <p><b>Created On:</b> <?= date("F j, Y g:i A", strtotime($post['date'])) ?></p>
         </div>
     <?php endwhile ?>
 </body>
