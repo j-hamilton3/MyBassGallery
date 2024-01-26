@@ -1,12 +1,12 @@
 <?php
-/*******w******** 
-    
+/*******w********
+
     Name: James Hamilton
     Date: November 4, 2023
     Description: A webpage for MyBassGallery that allows a user to login with a valid username and password.
 
 ****************/
-    
+
     // There must be a DB connection to continue.
     require('connect.php');
 
@@ -64,7 +64,7 @@
     }
 
     // Functionality for log out button.
-    if (array_key_exists('logout', $_POST)) 
+    if (array_key_exists('logout', $_POST))
     {
         $_SESSION = [];
         header("Location: index.php");
@@ -90,8 +90,8 @@
         <?php if(empty($_SESSION)) : ?>
             <div class="links">
                 <a href="categories.php">Categories</a>
-                <a href="register.php">Register</a> 
-            </div>  
+                <a href="register.php">Register</a>
+            </div>
         <?php else : ?>
             <div class="links">
                 <a href="create.php">Create a Post</a>
@@ -102,12 +102,12 @@
                 <?php endif ?>
                 <a class="username"><?= $_SESSION['user']['userName'] ?></a>
             </div>
-        <?php endif ?>   
+        <?php endif ?>
     </nav>
     <?php if(empty($_SESSION['user'])) : ?>
-    <h1>MyBassGallery Login:</h1>
-    <form action="login.php" method="post">
-        <legend>Please enter your login information:</legend> 
+    <h1 id="login-title">MyBassGallery Login:</h1>
+    <form action="login.php" method="post" id="login-form">
+        <legend>Please enter your login information:</legend>
         <br>
         <label for="username">Username</label>
         <br>
@@ -115,13 +115,13 @@
         <br>
         <label for="password">Password</label>
         <br>
-        <input type="password" name="password" id="password">  
-        <input type="submit" id="login-submit" value="Log In"> 
+        <input type="password" name="password" id="password">
+        <input type="submit" id="login-submit" value="Log In">
     </form>
-    <p> Not a registered user? <a href="register.php">Register Here</a></p>
         <?php if($errorMessage) : ?>
-        <h4 class="error"><?= $errorMessage ?></h4>
+        <h4 class="error" id="login-error"><?= $errorMessage ?></h4>
         <?php endif ?>
+    <p id="register-message"> Not a registered user? <a href="register.php">Register Here</a></p>
     <?php else : ?>
     <h2> You are logged in to your user account. </h2>
     <p> You are logged in as user <?= $_SESSION['user']['userName'] ?>. </p>

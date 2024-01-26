@@ -546,12 +546,12 @@ blockquote footer {
 .post {
     text-align: center;
     margin-bottom: 40px;
-    border: 1px solid #ccc; 
+    border: 1px solid #ccc;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    margin-left: 30px; 
-    margin-right: 30px; 
+    margin-left: 30px;
+    margin-right: 30px;
 }
 
 hr {
@@ -564,16 +564,16 @@ hr {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     padding: 10px;
-    margin-left: 30px; 
-    margin-right: 30px; 
+    margin-left: 30px;
+    margin-right: 30px;
     margin-bottom: 15px;
 }
 
 .navbar {
-   display: flex; 
-   align-items: center;
-   margin-bottom: 10px;
-  
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+
 }
 
 .navbar h1 {
@@ -582,13 +582,13 @@ hr {
 
 .links {
     width: 50%;
-    margin-right:10px;
-    display:flex;
+    margin-right: 10px;
+    display: flex;
     justify-content: space-around;
 }
 
 .links a {
-    font-size:20px;
+    font-size: 20px;
 }
 
 .logo {
@@ -598,7 +598,7 @@ hr {
 }
 
 .logo h1 {
-    color:#000;
+    color: #000;
 }
 
 a {
@@ -606,5 +606,22 @@ a {
 }
 
 .username {
-    color:#000;
+    color: #000;
+}
+
+#login-title {
+    text-align: center;
+}
+
+#login-form {
+    margin: auto;
+    width: 300px;
+}
+
+#login-error {
+    text-align: center;
+}
+
+#register-message {
+    text-align: center;
 }
