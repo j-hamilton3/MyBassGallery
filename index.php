@@ -66,7 +66,7 @@
     <?php while($post = $statement->fetch()) : ?>
         <div class="post">
             <h2><a href="post.php?id=<?= $post['postID'] ?>"><?= $post['title'] ?></a></h2>
-            <p>Serial Number: <?= $post['serialNumber'] ?></p>
+            <p><b>Serial Number:</b> <?= $post['serialNumber'] ?></p>
             <?php if(!empty($post['image'])) : ?>
                 <img src="<?= $post['image'] ?>" class="post-image">
             <?php endif ?>

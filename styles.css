@@ -625,3 +625,20 @@ a {
 #register-message {
     text-align: center;
 }
+
+#logged-in {
+    margin: auto;
+    text-align: center;
+}
+
+#logged-in a {
+    margin-top: 40px;
+    font-size: x-large
+}
+
+#logged-in-form {
+    margin: auto;
+    margin-top: 40px;
+    text-align: center;
+    width: 120px;
+}

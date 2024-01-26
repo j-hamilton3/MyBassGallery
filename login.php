@@ -123,12 +123,13 @@
         <?php endif ?>
     <p id="register-message"> Not a registered user? <a href="register.php">Register Here</a></p>
     <?php else : ?>
-    <h2> You are logged in to your user account. </h2>
-    <p> You are logged in as user <?= $_SESSION['user']['userName'] ?>. </p>
-    <a href="index.php">Return to home.</a>
-    <form method="post">
-        <input type="submit" name="logout" class="btn_logout" value="log out" />
-    </form>
+    <div id="logged-in">
+        <h2> You are logged in as user <?= $_SESSION['user']['userName'] ?>. </h2>
+        <a href="index.php">Return to home.</a>
+        <form method="post" id="logged-in-form">
+            <input type="submit" name="logout" class="btn_logout" value="log out" />
+        </form>
+    </div>
     <?php endif ?>
 </body>
 </html>

@@ -179,7 +179,7 @@
     <?php if($id) : ?>
         <div class="post">
             <h2><?= $post['title'] ?></h2>
-            <p>Serial Number: <?= $post['serialNumber'] ?></p>
+            <p><b>Serial Number:</b> <?= $post['serialNumber'] ?></p>
             <?php if(!empty($post['image'])) : ?>
                 <img src="<?= $post['image'] ?>" class="post-image">
             <?php endif ?>
