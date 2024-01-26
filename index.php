@@ -1,6 +1,6 @@
 <?php
 
-/*******w******** 
+/*******w********
 
     Name: James Hamilton
     Date: November 4, 2023
@@ -9,7 +9,7 @@
 ****************/
 
     // There must be a DB connection to continue.
-    require('connect.php'); 
+    require('connect.php');
 
     // Include the functions from the utility.php file.
     require('utility.php');
@@ -22,7 +22,7 @@
 
        // Make a prepare statement with the query.
     $statement = $db->prepare($query);
-   
+
     // Execute the statement.
     $statement->execute();
 
@@ -47,9 +47,9 @@
         <?php if(empty($_SESSION)) : ?>
             <div class="links">
                 <a href="categories.php">Categories</a>
-                <a href="register.php">Register</a> 
+                <a href="register.php">Register</a>
                 <a href="login.php">Login</a>
-            </div>  
+            </div>
         <?php else : ?>
             <div class="links">
                 <a href="create.php">Create a Post</a>
@@ -61,7 +61,7 @@
                 <a class="username"><?= $_SESSION['user']['userName'] ?></a>
                 <a href="login.php">Logout</a>
             </div>
-        <?php endif ?>   
+        <?php endif ?>
     </nav>
     <?php while($post = $statement->fetch()) : ?>
         <div class="post">
@@ -72,10 +72,10 @@
             <?php endif ?>
             <hr>
             <p class="post-content"><?= html_entity_decode($post['content']) ?></p>
-            <p class="post-category">Category: <?= getCategoryByID($post['categoryID'], $db)['categoryName'] ?></p>
-            <p>Post by user: <?= getUserByID($post['userID'], $db)['userName'] ?></p>
-            <p>Created on: <?= $post['date'] ?></p>
+            <p class="post-category"><b>Category:</b> <?= getCategoryByID($post['categoryID'], $db)['categoryName'] ?></p>
+            <p><b>By User:</b> <?= getUserByID($post['userID'], $db)['userName'] ?></p>
+            <p><b>Created On:</b> <?= $post['date'] ?></p>
         </div>
-    <?php endwhile ?>    
+    <?php endwhile ?>
 </body>
 </html>

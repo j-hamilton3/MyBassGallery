@@ -1,6 +1,6 @@
 <?php
 
-/*******w******** 
+/*******w********
 
     Name: James Hamilton
     Date: November 13, 2023
@@ -8,7 +8,7 @@
 
 ****************/
     // There must be a DB connection to continue.
-    require('connect.php'); 
+    require('connect.php');
 
     // Include the utility functions file.
     require('utility.php');
@@ -17,7 +17,7 @@
     session_start();
 
     if (isset($_GET['id'])) {
-        
+
         // Sanitize the id from the input GET.
         $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
@@ -108,7 +108,7 @@
 
             // Sanitize content.
             $content = filter_input(INPUT_POST, 'content', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            
+
             // Get the current date.
             $date = date('Y-m-d H:i:s');
 
@@ -122,7 +122,7 @@
             $statement->bindValue(":postID", $postID);
             $statement->bindValue(":content", $content);
             $statement->bindValue(":date", $date);
-        
+
             // Execute the INSERT.
             $statement->execute();
         }
@@ -135,7 +135,7 @@
         $commentQuery = "SELECT * FROM comment WHERE postID = :id ORDER BY date DESC";
         $commentStatement = $db->prepare($commentQuery);
         $commentStatement->bindValue(':id', $id);
- 
+
         // Execute the statement.
         $commentStatement->execute();
     }
@@ -160,9 +160,9 @@
         <?php if(empty($_SESSION)) : ?>
             <div class="links">
                 <a href="categories.php">Categories</a>
-                <a href="register.php">Register</a> 
-                <a href="login.php">Login</a>   
-            </div>  
+                <a href="register.php">Register</a>
+                <a href="login.php">Login</a>
+            </div>
         <?php else : ?>
             <div class="links">
                 <a href="create.php">Create a Post</a>
@@ -174,7 +174,7 @@
                 <a class="username"><?= $_SESSION['user']['userName'] ?></a>
                 <a href="login.php">Logout</a>
             </div>
-        <?php endif ?>   
+        <?php endif ?>
     </nav>
     <?php if($id) : ?>
         <div class="post">
@@ -185,9 +185,9 @@
             <?php endif ?>
             <hr>
             <p class="post-content"><?= html_entity_decode($post['content']) ?></p>
-            <p class="post-category">Category: <?= getCategoryByID($post['categoryID'], $db)['categoryName'] ?></p>
-            <p>Post by user: <?= getUserByID($post['userID'], $db)['userName'] ?></p>
-            <p>Created on: <?= $post['date'] ?></p>
+            <p class="post-category"><b>Category: </b><?= getCategoryByID($post['categoryID'], $db)['categoryName'] ?></p>
+            <p><b>By User:</b> <?= getUserByID($post['userID'], $db)['userName'] ?></p>
+            <p><b>Created On:</b> <?= $post['date'] ?></p>
             <?php if($editPermission || $userCreatedThisPost) : ?>
                 <a href="edit.php?id=<?= $post['postID'] ?>">Edit this post</a>
             <?php endif ?>
@@ -200,7 +200,7 @@
                 <?php if($userType == 1 || $userType == 2) :?>
                     <form method="post">
                         <input type="hidden"  name="commentID" value="<?= $comment['commentID'] ?>" >
-                        <input type="submit" name="action" value="Delete" onclick="return confirm('Are you sure you wish to delete this comment?')" > 
+                        <input type="submit" name="action" value="Delete" onclick="return confirm('Are you sure you wish to delete this comment?')" >
                     </form>
                 <?php endif ?>
             </div>
