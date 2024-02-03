@@ -1,15 +1,15 @@
 <?php
 
-/*******w******** 
-    
+/*******w********
+
     Name: James Hamilton
     Date: November 4, 2023
     Description: A webpage for MyBassGallery that allows a user to create a profile.
 
 ****************/
-    
+
     // There must be a DB connection to continue.
-    require('connect.php'); 
+    require('connect.php');
 
     // Include the utility functions.
     require('utility.php');
@@ -39,7 +39,7 @@
         }
 
         // Check if the username is valid.
-        
+
         // If it is zero characters or more than 20 characters.
         if (!$_POST['username'] || strlen($_POST['username']) > 20)
         {
@@ -48,7 +48,7 @@
         else
         {
             $username = $_POST['username'];
-            
+
             // Create the SQL Query -> Checks if the matching user in the DB.
             $query = "SELECT * FROM Users WHERE username = :username";
             $statement = $db->prepare($query);
@@ -60,7 +60,7 @@
             $statement->execute();
 
             // Check if there is a username.
-            $user = $statement->fetch(); 
+            $user = $statement->fetch();
 
             if ($user)
             {
@@ -69,15 +69,15 @@
         }
 
         // Check if the password is valid.
-        
+
         // If it is zero characters or more than 20 characters.
         if (!$_POST['password'] || strlen($_POST['password']) > 20)
         {
-            $passwordFlag = true;        
+            $passwordFlag = true;
         }
 
         // Check if the passwords match.
-        
+
         if (!$_POST['password2'] || $_POST['password'] != $_POST['password2'])
         {
             $passwordMatchFlag = true;
@@ -138,7 +138,7 @@
             <div class="links">
                 <a href="categories.php">Categories</a>
                 <a href="login.php">Login</a>
-            </div>  
+            </div>
         <?php else : ?>
             <div class="links">
                 <a href="create.php">Create a Post</a>
@@ -150,21 +150,21 @@
                 <a class="username"><?= $_SESSION['user']['userName'] ?></a>
                 <a href="login.php">Logout</a>
             </div>
-        <?php endif ?>   
+        <?php endif ?>
     </nav>
     <?php if(!$userCreatedFlag && empty($_SESSION)) : ?>
-    <h1>Register for a MyBassGallery account:</h1>
-    <form action="register.php" method="post">
-    <legend>Please enter the following information:</legend> 
+    <h1 id="register-title">Register for a MyBassGallery account:</h1>
+    <form id="register-form" action="register.php" method="post">
+    <legend>Please enter the following information:</legend>
     <br>
-    <label for="email">Email<label>
+    <label for="email">Email:<label>
     <br>
     <input type="email" name="email" id="register-email">
     <?php if($emailFlag) : ?>
     <p class="error"> Please enter a valid email.</p>
     <?php endif ?>
     <br>
-    <label for="username">Username</label>
+    <label for="username">Username:</label>
     <br>
     <input name="username" id="register-username">
     <?php if($usernameFlag) : ?>
@@ -174,7 +174,7 @@
     <p class="error">The selected username is already in use.</p>
     <?php endif ?>
     <br>
-    <label for="password">Password</label>
+    <label for="password">Password:</label>
     <br>
     <input type="password" name="password" id="register-password">
     <?php if($passwordFlag) : ?>
@@ -188,8 +188,8 @@
     <p class="error">The passwords must match.</p>
     <?php endif ?>
     <br>
-    <br>  
-    <input type="submit" id="register-submit" value="Register"> 
+    <br>
+    <input type="submit" id="register-submit" value="Register">
     </form>
     <?php endif ?>
     <?php if($userCreatedFlag) : ?>

@@ -660,3 +660,17 @@ a {
 #commentContent {
     width: 80%
 }
+
+#register-title {
+    text-align: center;
+}
+
+#register-form {
+    width: 500px;
+    margin: auto;
+    text-align: center;
+}
+
+#register-form input {
+    margin: auto;
+}
