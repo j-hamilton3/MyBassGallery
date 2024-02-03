@@ -1,7 +1,7 @@
 <?php
 
-/*******w******** 
-    
+/*******w********
+
     Name: James Hamilton
     Date: November 14, 2023
     Description: A webpage for MyBassGallery that allows users to view all page categories.
@@ -9,7 +9,7 @@
 ****************/
 
     // There must be a DB connection to continue.
-    require('connect.php'); 
+    require('connect.php');
 
     // Include the utility functions file.
     require('utility.php');
@@ -43,9 +43,9 @@
         </a>
         <?php if(empty($_SESSION)) : ?>
             <div class="links">
-                <a href="register.php">Register</a> 
-                <a href="login.php">Login</a>   
-            </div>  
+                <a href="register.php">Register</a>
+                <a href="login.php">Login</a>
+            </div>
         <?php else : ?>
             <div class="links">
                 <a href="create.php">Create a Post</a>
@@ -56,13 +56,17 @@
                 <a class="username"><?= $_SESSION['user']['userName'] ?></a>
                 <a href="login.php">Logout</a>
             </div>
-        <?php endif ?>   
+        <?php endif ?>
     </nav>
-    <h1>Categories: </h1>
-    <?php while($category = $categoriesStatement->fetch()) : ?>
-        <a href="postsByCategory.php?id=<?= $category['categoryID'] ?>"><?= $category['categoryName'] ?> </a>
-        <br>
-        <br>
-    <?php endwhile ?>
+    <h1 id="category-title">Categories: </h1>
+    <div id="category-container">
+        <?php while($category = $categoriesStatement->fetch()) : ?>
+            <a href="postsByCategory.php?id=<?= $category['categoryID'] ?>">
+                <div class="category-select">
+                    <?= $category['categoryName'] ?>
+                </div>
+            </a>
+        <?php endwhile ?>
+    </div>
 </body>
 </html>

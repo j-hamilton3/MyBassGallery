@@ -105,15 +105,15 @@
         <?php endif ?>
     </nav>
     <?php if(empty($_SESSION['user'])) : ?>
-    <h1 id="login-title">MyBassGallery Login:</h1>
+    <h1 id="login-title">MyBassGallery Login</h1>
     <form action="login.php" method="post" id="login-form">
         <legend>Please enter your login information:</legend>
         <br>
-        <label for="username">Username</label>
+        <label for="username">Username:</label>
         <br>
         <input name="username" id="username">
         <br>
-        <label for="password">Password</label>
+        <label for="password">Password:</label>
         <br>
         <input type="password" name="password" id="password">
         <input type="submit" id="login-submit" value="Log In">
