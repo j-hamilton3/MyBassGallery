@@ -642,3 +642,21 @@ a {
     text-align: center;
     width: 120px;
 }
+
+#comment-header {
+    text-align: center;
+}
+
+#comment-form {
+    text-align: center;
+    margin: auto;
+    margin-bottom: 15px;
+}
+
+#comment-form input {
+    margin: auto;
+}
+
+#commentContent {
+    width: 80%
+}

@@ -132,7 +132,7 @@
     if ($id)
     {
         // Build the SQL query using the filtered id.
-        $commentQuery = "SELECT * FROM comment WHERE postID = :id ORDER BY date DESC";
+        $commentQuery = "SELECT * FROM comment WHERE postID = :id ORDER BY date ASC";
         $commentStatement = $db->prepare($commentQuery);
         $commentStatement->bindValue(':id', $id);
 
@@ -206,9 +206,8 @@
             </div>
         <?php endwhile ?>
         <?php if($userType != 0) : ?>
-            <h2>Submit a comment, <?= $_SESSION['user']['userName'] ?>:</h2>
-            <form method="post">
-                <label for="content">Comment: </label>
+            <h2 id="comment-header">Submit a comment, <?= $_SESSION['user']['userName'] ?>:</h2>
+            <form id="comment-form" method="post">
                 <br>
                 <br>
                 <input name="content" id="commentContent">
